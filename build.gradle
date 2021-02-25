@@ -11,6 +11,10 @@ apply plugin: 'maven-publish'
 apply plugin: 'java-library'
 apply plugin: 'jacoco'
 
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+compileJava.options.encoding = 'UTF-8'
+
 def externalFileName = "$projectDir/.external"
 if (file(externalFileName).exists()) {
     apply from: "external.gradle"
@@ -18,10 +22,7 @@ if (file(externalFileName).exists()) {
     apply from: "monext.gradle"
 }
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
 
-compileJava.options.encoding = 'UTF-8'
 
 configurations {
     fatJarTest
