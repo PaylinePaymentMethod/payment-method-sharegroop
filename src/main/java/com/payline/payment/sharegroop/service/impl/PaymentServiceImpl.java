@@ -156,7 +156,7 @@ public class PaymentServiceImpl implements PaymentService {
                 .replace(EMAIL, request.getBuyer().getEmail())
                 .replace(FIRSTNAME, request.getBuyer().getFullName().getFirstName())
                 .replace(LASTNAME, request.getBuyer().getFullName().getLastName())
-                .replace(TRACK_ID, request.getTransactionId())
+                .replace(TRACK_ID, request.getOrder().getReference())
                 .replace(UX, request.getContractConfiguration().getProperty(Constants.ContractConfigurationKeys.UX).getValue())
                 .replace(ITEMS, items)
                 .replace(CALLBACK, CALLBACK_NAME);
