@@ -114,4 +114,21 @@ class LogoPaymentFormConfigurationServiceTest {
         assertThrows( PluginException.class, () -> testService.getLogo( "whatever", locale ) );
     }
 
+    @Test
+    void getLogoByFilename_OK() {
+
+        //calling method getLogoByFilename()
+        PaymentFormLogo paymentFormLogo = testService.getLogoByFilename("test_logo.png","png","image/png");
+
+        assertEquals("image/png", paymentFormLogo.getContentType());
+        assertNotNull(paymentFormLogo.getFile());
+    }
+
+    @Test
+    void getLogoByFilename_wrongFilename() {
+
+        // calling method getLogoByFilename(), then: an exception is thrown
+        assertThrows( PluginException.class, () -> testService.getLogoByFilename("does_not_exist.png","png","image/png") );
+    }
+
 }
