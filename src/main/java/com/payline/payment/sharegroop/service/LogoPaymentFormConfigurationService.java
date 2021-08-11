@@ -47,28 +47,31 @@ public abstract class LogoPaymentFormConfigurationService implements PaymentForm
 
     @Override
     public PaymentFormLogo getLogo(String paymentMethodIdentifier, Locale locale) {
-        String filename = config.get("logo.filename");
+        final String filename = config.get("logo.filename");
+        final String format = config.get("logo.format");
+        final String contentType = config.get("logo.contentType");
+        return getLogoByFilename(filename, format, contentType);
+    }
 
-        InputStream input = this.getClass().getClassLoader().getResourceAsStream( filename );
-        if (input == null) {
-            LOGGER.error("Unable to load file {}", filename);
-            throw new PluginException("Plugin error: unable to load the logo file" );
-        }
-        try {
+    protected PaymentFormLogo getLogoByFilename(final String filename, final String format, final String contentType) {
+        try (InputStream input = this.getClass().getClassLoader().getResourceAsStream(filename)) {
+            if (input == null) {
+                LOGGER.error("Unable to load file {}", filename);
+                throw new PluginException("Plugin error: unable to load the logo file");
+            }
             // Read logo file
-            BufferedImage logo = ImageIO.read(input);
+            final BufferedImage logo = ImageIO.read(input);
 
             // Recover byte array from image
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ImageIO.write(logo, config.get("logo.format"), baos);
+            final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(logo, format, baos);
 
             return PaymentFormLogo.PaymentFormLogoBuilder.aPaymentFormLogo()
                     .withFile(baos.toByteArray())
-                    .withContentType(config.get("logo.contentType"))
+                    .withContentType(contentType)
                     .build();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new PluginException("Plugin error: unable to read the logo", e);
         }
     }
-
 }
